@@ -1,0 +1,85 @@
+<div class="container" [formGroup]="quizForm">
+  <h2>建立新問卷</h2>
+
+  <fieldset formGroupName="quiz">
+    <legend>基本資訊</legend>
+    <div class="form-group">
+      <label>問卷標題：</label>
+      <input type="text" formControlName="title" placeholder="輸入問卷名稱">
+    </div>
+
+    <div class="form-group">
+      <label>描述：</label>
+      <textarea formControlName="description"></textarea>
+    </div>
+
+    <div class="form-row">
+      <div>
+        <label>開始日期：</label>
+        <input type="date" formControlName="startDate">
+      </div>
+      <div>
+        <label>結束日期：</label>
+        <input type="date" formControlName="endDate">
+      </div>
+    </div>
+  </fieldset>
+
+  <hr>
+
+  <div>
+    <h3>題目列表</h3>
+    <div formArrayName="questionVoList">
+      @for (question of questions.controls; track question; let i = $index) {
+        <div [formGroupName]="i" class="question-block">
+          <div class="header-row">
+            <h4>題目 {{ i + 1 }}</h4>
+            <label>
+              <input type="checkbox" formControlName="required"> 必填
+            </label>
+          </div>
+          
+          <div class="form-group">
+            <label>題目內容：</label>
+            <input type="text" formControlName="name" placeholder="輸入題目內容">
+          </div>
+
+          <div class="form-group">
+            <label>題型：</label>
+            <select formControlName="type">
+              <option value="S">單選</option>
+              <option value="M">多選</option>
+              <option value="T">文字輸入</option>
+            </select>
+          </div>
+
+          @if (question.get('type')?.value !== 'T') {
+            <div formArrayName="optionsList" class="options-container">
+              @for (option of getOptions(question).controls; track option; let j = $index) {
+                <div [formGroupName]="j" class="option-block">
+                  <label>選項 {{ j + 1 }}：</label>
+                  <input type="text" formControlName="optionName" placeholder="輸入選項內容">
+                  <button type="button" (click)="removeOption(question, j)">刪除</button>
+                </div>
+              } @empty {
+                <p>請點擊下方按鈕新增選項。</p>
+              }
+              <button type="button" (click)="addOption(question)">＋ 新增選項</button>
+            </div>
+          }
+
+          <div class="question-actions">
+            <button type="button" (click)="removeQuestion(i)" class="btn-delete">刪除題目</button>
+          </div>
+          <hr>
+        </div>
+      }
+      
+      <button type="button" (click)="addQuestion()" class="btn-add-q">新增題目</button>
+    </div>
+
+    <div class="footer-actions">
+      <button type="button" (click)="onSubmit()" class="btn-submit">送出問卷</button>
+    </div>
+  </div>
+</div>

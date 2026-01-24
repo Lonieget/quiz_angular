@@ -1,0 +1,46 @@
+<div>
+    <p>搜尋：<input type="text" (keyup)="filterQuiz()" [(ngModel)]="searchText"></p>
+</div>
+<div>
+    <span>使用者 : {{name}}</span>
+    <span></span>
+</div>
+<div>
+    <button (click)="createQuestion()">新增問卷</button>
+</div>
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th>題號</th>
+                <th>題目</th>
+                <th>描述</th>
+                <th>開始日期</th>
+                <th>結束日期</th>
+                <th>發布狀態</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (quiz of filteredQuizList; track quiz) {
+                <tr>
+                    <td>{{ quiz.id }}</td>
+                    <td>{{ quiz.title }}</td>
+                    <td>{{quiz.description}}</td>
+                    <td>{{quiz.startDate}}</td>
+                    <td>{{quiz.endDate}}</td>
+                    <td>{{quiz.publish ? '已發布' : '未發布' }}</td>
+                    <td>
+                        <button (click)="feedback(quiz.id)">統計</button>
+                        <button (click)="editQuestion(quiz.id)">編輯</button>
+                        <button (click)="deleteQuestion(quiz.id)">刪除</button>
+                    </td>
+                </tr>
+            } @empty {
+                <tr>
+                    <td colspan="3">查無相關題目</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

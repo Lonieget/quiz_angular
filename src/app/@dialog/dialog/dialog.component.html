@@ -1,0 +1,18 @@
+<div class="dialogContainer">
+  <div mat-dialog-title class="diaTitle">
+    ＊ 溫馨提醒 ＊
+  </div>
+
+  <mat-dialog-content class="dialogContent">
+    <div class="messageWrapper">
+      <p>{{ data.message }}</p>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <div class="btnBox">
+      <!-- <button class="cancel" [mat-dialog-close]="false">取消</button> -->
+      <button class="btn confirmBtn" [mat-dialog-close]="true">確認</button>
+    </div>
+  </mat-dialog-actions>
+</div>

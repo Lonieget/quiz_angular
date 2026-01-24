@@ -1,0 +1,50 @@
+<div>
+    <h2>Login</h2>
+    @if(registerBut == false) {
+    <form>
+        <label for="account">Account:</label>
+        <input type="text" name="account" [(ngModel)]="account">
+
+        <label for="password">Password:</label>
+        <input type="password" name="password" [(ngModel)]="passwrod">
+
+        <button type="submit" (click)="login()">登入</button>
+        <span (click)="register()">前往註冊</span>
+    </form>
+    } @else {
+    <form>
+        <label for="account">Account:</label>
+        <input type="text" name="account" [(ngModel)]="account">
+
+        <label for="password">Password:</label>
+        <input type="password" name="password" [(ngModel)]="passwrod">
+
+        <label for="name">Name:</label>
+        <input type="text" name="name" [(ngModel)]="name">
+
+        <label for="phone">phone:</label>
+        <input type="text" name="phone" [(ngModel)]="phone">
+
+        <label for="email">Email:</label>
+        <input type="text" name="email" [(ngModel)]="email">
+
+        <label for="age">age:</label>
+        <input type="number" name="age" [(ngModel)]="age">
+
+        <div class="form-group">
+            <label for="gender">性別：</label>
+            <select name="gender" [(ngModel)]="gender">
+                <option value="" disabled selected>請選擇</option>
+                <option value="M">男</option>
+                <option value="F">女</option>
+            </select>
+        </div>
+
+        <button (click)="register()">返回</button>
+        <button (click)="registerUser()">註冊</button>
+    </form>
+
+
+    }
+
+</div>
