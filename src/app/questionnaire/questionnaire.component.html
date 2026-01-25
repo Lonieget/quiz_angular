@@ -25,7 +25,7 @@
             @for (quiz of filteredQuizList; track quiz) {
                 <tr>
                     <td>{{ quiz.id }}</td>
-                    <td>{{ quiz.title }}</td>
+                    <td (click)="toQuiz(quiz.id)">{{ quiz.title }}</td>
                     <td>{{quiz.description}}</td>
                     <td>{{quiz.startDate}}</td>
                     <td>{{quiz.endDate}}</td>

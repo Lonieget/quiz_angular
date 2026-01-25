@@ -34,13 +34,13 @@ export class ApiDataService {
 login(account: string, password: string): Observable<any> {
   const url = `${this.apiUrl}/quiz/login`;
   const payload = { account, password };
-  return this.http.post(url, payload);  
+  return this.http.post(url, payload);
 }
-    
+
 register(account: string, password: string, name: string, phone: string, email: string, age: number, gender: string): Observable<any> {
   const url = `${this.apiUrl}/quiz/add_info`;
   const payload = { account, password, name, phone, email, age, gender };
-  return this.http.post(url, payload);    
+  return this.http.post(url, payload);
 }
 
 feedback(quizId: number): Observable<any> {
@@ -54,5 +54,8 @@ statistics(quizId: number): Observable<any> {
 questionList(quizId: number): Observable<any> {
   const url = `${this.apiUrl}/quiz/question_list?quizId=${quizId}`;
   return this.http.get(url);
+}
+fillin(quizId:number){
+
 }
 }

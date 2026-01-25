@@ -24,7 +24,7 @@ export class QuizCreateComponent {
         endDate: [''],
         publish: [false] // 預設不發佈
       }),
-      questionVoList: this.fb.array([]) 
+      questionVoList: this.fb.array([])
     });
   }
   ngOnInit() {
@@ -44,7 +44,7 @@ export class QuizCreateComponent {
       // 對應 JSON 的 "name"
       name: ['', Validators.required],
       // 對應 JSON 的 "type"
-      type: ['S'], 
+      type: ['S'],
       required: [true],
       optionsList: this.fb.array([])
     });
@@ -99,5 +99,9 @@ export class QuizCreateComponent {
       console.log('Quiz created successfully', response);
       this.router.navigate(['questionnaire']);
     });
+  }
+
+  onBack(){
+    this.router.navigate(['questionnaire']);
   }
 }

@@ -1,0 +1,20 @@
+<div>
+  <h1>問卷題目</h1>
+  @for(quiz of questionVoList; track quiz; let i = $index) {
+    <div class="question-block">
+      <h3>題目 {{ i + 1 }}</h3>
+      <p>{{ quiz.name }}</p>
+      @for(quizList of quiz.optionsList; track quizList){
+      <p>
+      <input type="checkbox" [(ngModel)]="quizList.checkBoolean">
+      {{ quizList.optionName }}
+      <span>(狀態: {{ quizList.checkBoolean }})</span>
+    </p>
+      }
+    </div>
+  } @empty {
+    <p>無題目資料</p>
+  }
+  <button (click)="onBack()">返回</button>
+  <button (click)="sendOut()">送出問卷</button>
+</div>

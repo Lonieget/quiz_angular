@@ -30,12 +30,12 @@ export class QuestionnaireComponent implements OnInit {
     this.getQuizStatus();
     this.name=this.userService.name;
   }
-  editQuestion(id: number) { 
+  editQuestion(id: number) {
     this.router.navigate(['edit', id]);
   }
   deleteQuestion(id: number) {
    this.apiDataService.deleteQuiz(id).subscribe(() => {
-      this.filterQuiz(); 
+      this.filterQuiz();
       this.getQuizStatus();
     });
 }
@@ -50,26 +50,25 @@ export class QuestionnaireComponent implements OnInit {
   this.filteredQuizList = this.quizList.filter(quiz => {
     const title = (quiz.title || '').toLowerCase();
     const id = (quiz.id || '').toString();
-    
+
     return title.includes(search) || id.includes(search);
   });
 }
 getQuizStatus(){
   this.apiDataService.getQuiz().subscribe((res: any) => {
       this.quizList = res.quizList;
-      this.filteredQuizList = [...this.quizList]; 
+      this.filteredQuizList = [...this.quizList];
     });
 }
 feedback(id: number) {
-     this.apiDataService.feedback(id).subscribe((res) => {
-      console.log(res);
-      console.log(id);
-      
-      
-      alert("感謝您的回饋！");
-    });
+     this.router.navigate(['feedback', id]);
 }
 createQuestion() {
-  this.router.navigate(['questCreate']);  
+  this.router.navigate(['questCreate']);
+}
+
+toQuiz(id: number){
+  this.router.navigate(['quiz', id]);
+  console.log(id);
 }
 }
