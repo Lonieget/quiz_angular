@@ -2,10 +2,10 @@
     <h2>Login</h2>
     @if(registerBut == false) {
     <form>
-        <label for="account">Account:</label>
+        <label for="account">帳號:</label>
         <input type="text" name="account" [(ngModel)]="account">
 
-        <label for="password">Password:</label>
+        <label for="password">密碼:</label>
         <input type="password" name="password" [(ngModel)]="passwrod">
 
         <button type="submit" (click)="login()">登入</button>

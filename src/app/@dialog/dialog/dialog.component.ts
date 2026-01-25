@@ -28,5 +28,4 @@ import {MatInputModule} from '@angular/material/input';
 export class DialogComponent {
  data = inject(MAT_DIALOG_DATA);
 
-
 }

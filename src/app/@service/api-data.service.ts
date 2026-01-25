@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class ApiDataService {
 
-  private apiUrl = 'http://localhost:8080'; // 你的 API 網址
+  private apiUrl = 'http://localhost:8080';
 
   constructor(private http: HttpClient) { }
 
