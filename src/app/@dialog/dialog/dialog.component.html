@@ -1,18 +1,23 @@
-<div class="dialogContainer">
-  <div mat-dialog-title class="diaTitle">
-    ＊ 溫馨提醒 ＊
+<div class="dialog-container cyber-panel">
+  <div mat-dialog-title class="tech-font dia-title cyber-glitch"
+    [attr.data-text]="data.isConfirm ? '// 指令確認 REQ_CONFIRM //' : '// 系統警報 CRT_ALRT //'">
+    {{ data.isConfirm ? '// 指令確認 REQ_CONFIRM //' : '// 系統警報 CRT_ALRT //' }}
   </div>
 
-  <mat-dialog-content class="dialogContent">
-    <div class="messageWrapper">
-      <p>{{ data.message }}</p>
+  <mat-dialog-content class="dialog-content">
+    <div class="message-wrapper">
+      <p class="tech-message">{{ data.message }}</p>
     </div>
   </mat-dialog-content>
 
-  <mat-dialog-actions>
-    <div class="btnBox">
-      <!-- <button class="cancel" [mat-dialog-close]="false">取消</button> -->
-      <button class="btn confirmBtn" [mat-dialog-close]="true">確認</button>
+  <mat-dialog-actions class="dialog-actions">
+    <div class="btn-box">
+      @if (data.isConfirm) {
+      <button class="tech-button secondary" [mat-dialog-close]="false">取消指令 (ABORT)</button>
+      <button class="tech-button danger" [mat-dialog-close]="true">執行抹除 (EXECUTE)</button>
+      } @else {
+      <button class="tech-button" [mat-dialog-close]="true">接入指令 (ACK_SIG)</button>
+      }
     </div>
   </mat-dialog-actions>
 </div>

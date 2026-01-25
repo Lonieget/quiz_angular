@@ -4,6 +4,9 @@ import { ApiDataService } from '../@service/api-data.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../@service/user.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '../@dialog/dialog/dialog.component';
+import { inject } from '@angular/core';
 
 @Component({
   selector: 'app-quiz-create',
@@ -14,8 +17,11 @@ import { UserService } from '../@service/user.service';
 })
 export class QuizCreateComponent {
   quizForm: FormGroup;
+  readonly dialog = inject(MatDialog);
+  minDate: string = '';
 
-  constructor(private fb: FormBuilder, private apiDataService: ApiDataService,private userService: UserService,private router: Router) {
+  constructor(private fb: FormBuilder, private apiDataService: ApiDataService, private userService: UserService, private router: Router) {
+    this.minDate = new Date().toISOString().split('T')[0];
     this.quizForm = this.fb.group({
       quiz: this.fb.group({
         title: ['', Validators.required],
@@ -28,8 +34,8 @@ export class QuizCreateComponent {
     });
   }
   ngOnInit() {
-    if(!this.userService.online){
-      alert("請先登入");
+    if (!this.userService.online) {
+      this.dialog.open(DialogComponent, { data: { message: "請先登入" } });
       this.router.navigate(['login']);
       return;
     }
@@ -73,7 +79,7 @@ export class QuizCreateComponent {
 
   onSubmit() {
     if (this.quizForm.invalid) {
-      alert('請填寫完整內容');
+      this.dialog.open(DialogComponent, { data: { message: "請填寫完整內容" } });
       return;
     }
 
@@ -95,13 +101,29 @@ export class QuizCreateComponent {
 
     console.log('符合格式的 JSON 輸出：', formattedData);
 
-    this.apiDataService.createQuiz(formattedData).subscribe(response => {
-      console.log('Quiz created successfully', response);
-      this.router.navigate(['questionnaire']);
+    this.apiDataService.createQuiz(formattedData).subscribe({
+      next: (response) => {
+        if (response && response.code === 200) {
+          this.dialog.open(DialogComponent, {
+            data: { message: response.message || "新矩陣封裝成功 // 數據已寫入磁區" }
+          });
+          this.router.navigate(['questionnaire']);
+        } else {
+          this.dialog.open(DialogComponent, {
+            data: { message: `封裝失敗: ${response?.message || '協定溢位'}` }
+          });
+        }
+      },
+      error: (err) => {
+        console.error('Creation error:', err);
+        this.dialog.open(DialogComponent, {
+          data: { message: "數據傳輸中斷 // 連線異常 // STACK_OVERFLOW" }
+        });
+      }
     });
   }
 
-  onBack(){
+  onBack() {
     this.router.navigate(['questionnaire']);
   }
 }

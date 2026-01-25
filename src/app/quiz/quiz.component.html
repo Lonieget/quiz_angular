@@ -1,20 +1,33 @@
-<div>
-  <h1>問卷題目</h1>
-  @for(quiz of questionVoList; track quiz; let i = $index) {
-    <div class="question-block">
-      <h3>題目 {{ i + 1 }}</h3>
-      <p>{{ quiz.name }}</p>
-      @for(quizList of quiz.optionsList; track quizList){
-      <p>
-      <input type="checkbox" [(ngModel)]="quizList.checkBoolean">
-      {{ quizList.optionName }}
-      <span>(狀態: {{ quizList.checkBoolean }})</span>
-    </p>
-      }
+<div class="quiz-view-container">
+  <h1 class="tech-font cyber-glitch page-title" [attr.data-text]="'量子分析任務 (QUANTUM_ANALYSIS)'">量子分析任務 (QUANTUM_ANALYSIS)
+  </h1>
+
+  <div class="questions-list">
+    @for(quiz of questionVoList; track quiz; let i = $index) {
+    <div class="cyber-panel question-card">
+      <h3 class="tech-font neon-text-cyan">// 分析向量 VECTOR_{{ i + 1 }}</h3>
+      <p class="question-text">{{ quiz.name }}</p>
+
+      <div class="options-container">
+        @for(option of quiz.optionsList; track option){
+        <label class="option-item">
+          <input type="checkbox" [(ngModel)]="option.checkBoolean" class="hidden-checkbox">
+          <span class="custom-checkbox"></span>
+          <span class="option-label">{{ option.optionName }}</span>
+          <!-- <span class="status-indicator" [class.active]="option.checkBoolean">({{ option.checkBoolean ? 'LINKED' : 'OFFLINE' }})</span> -->
+        </label>
+        }
+      </div>
     </div>
-  } @empty {
-    <p>無題目資料</p>
-  }
-  <button (click)="onBack()">返回</button>
-  <button (click)="sendOut()">送出問卷</button>
+    } @empty {
+    <div class="cyber-panel empty-card">
+      <p class="tech-font cyber-glitch" [attr.data-text]="'// 偵測不到數據流 FLOW_ERR_404 //'">// 偵測不到數據流 FLOW_ERR_404 //</p>
+    </div>
+    }
+  </div>
+
+  <div class="quiz-actions">
+    <button (click)="onBack()" class="tech-button secondary">中止任務 (ABORT)</button>
+    <button (click)="sendOut()" class="tech-button">傳輸分析數據 (TX_DATA)</button>
+  </div>
 </div>

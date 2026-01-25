@@ -1,0 +1,81 @@
+.app-container {
+    min-height: 100vh;
+    position: relative;
+    background-color: var(--cp-black);
+    background-image:
+        radial-gradient(circle at 50% 50%, rgba(255, 0, 85, 0.05) 0%, transparent 70%),
+        radial-gradient(circle at 80% 20%, rgba(0, 240, 255, 0.05) 0%, transparent 50%);
+    overflow: hidden;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 200%;
+        height: 200%;
+        background-image:
+            linear-gradient(rgba(253, 238, 6, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(253, 238, 6, 0.03) 1px, transparent 1px);
+        background-size: 30px 30px;
+        transform: perspective(1000px) rotateX(60deg) translateY(-50%);
+        animation: grid-move 15s linear infinite;
+        z-index: 0;
+    }
+
+    &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(rgba(18, 16, 16, 0) 50%,
+                rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg,
+                rgba(255, 0, 0, 0.03),
+                rgba(0, 255, 0, 0.01),
+                rgba(0, 0, 255, 0.03));
+        background-size: 100% 4px, 4px 100%;
+        pointer-events: none;
+        z-index: 10;
+    }
+}
+
+.scanline {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: rgba(255, 0, 85, 0.2);
+    box-shadow: 0 0 10px var(--cp-pink);
+    animation: scanline 4s linear infinite;
+    z-index: 11;
+    pointer-events: none;
+}
+
+.content-wrapper {
+    position: relative;
+    z-index: 2;
+    padding: 2rem;
+}
+
+@keyframes grid-move {
+    0% {
+        transform: perspective(1000px) rotateX(60deg) translateY(-50%);
+    }
+
+    100% {
+        transform: perspective(1000px) rotateX(60deg) translateY(0%);
+    }
+}
+
+@keyframes scanline {
+    0% {
+        top: -5%;
+    }
+
+    100% {
+        top: 105%;
+    }
+}

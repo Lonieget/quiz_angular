@@ -1,4 +1,277 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap');
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+:root {
+    --cp-yellow: #fdee06;
+    --cp-pink: #ff0055;
+    --cp-blue: #00f0ff;
+    --cp-black: #050505;
+    --cp-dark-blue: #0b0e14;
+    --cp-gray: #1a1c23;
+
+    /* Redefine global vars for compatibility */
+    --bg-dark: var(--cp-black);
+    --bg-card: rgba(26, 28, 35, 0.85);
+    --neon-cyan: var(--cp-blue);
+    --neon-magenta: var(--cp-pink);
+    --neon-green: #39ff14;
+    --neon-blue: #0072ff;
+    --text-main: #ffffff;
+    --text-dim: #8b949e;
+    --border-color: rgba(253, 238, 6, 0.3);
+    --glass-blur: blur(8px);
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    background-color: var(--cp-black);
+    color: var(--text-main);
+    font-family: 'Rajdhani', sans-serif;
+    overflow-x: hidden;
+    background-image:
+        linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 2px, 3px 100%;
+}
+
+h1,
+h2,
+h3,
+.tech-font {
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* Glassmorphism Utility */
+.glass-panel {
+    background: var(--bg-card);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+}
+
+/* Neon Glow Utilities */
+.neon-glow-cyan {
+    box-shadow: 0 0 10px var(--neon-cyan), inset 0 0 5px var(--neon-cyan);
+}
+
+.neon-text-cyan {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 8px var(--neon-cyan);
+}
+
+.neon-border-cyan {
+    border: 1px solid var(--neon-cyan) !important;
+    box-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-dark);
+}
+
+/* Cyberpunk Utility Classes */
+.cyber-glitch {
+    position: relative;
+
+    &::before,
+    &::after {
+        content: attr(data-text);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.8;
+    }
+
+    &::before {
+        left: 2px;
+        text-shadow: -2px 0 var(--cp-pink);
+        clip: rect(44px, 450px, 56px, 0);
+        animation: glitch-anim 5s infinite linear alternate-reverse;
+    }
+
+    &::after {
+        left: -2px;
+        text-shadow: -2px 0 var(--cp-blue);
+        clip: rect(44px, 450px, 56px, 0);
+        animation: glitch-anim2 5s infinite linear alternate-reverse;
+    }
+}
+
+.clipped-corner {
+    clip-path: polygon(0 0,
+            calc(100% - 20px) 0,
+            100% 20px,
+            100% 100%,
+            20px 100%,
+            0 calc(100% - 20px));
+}
+
+.cyber-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--cp-yellow);
+    box-shadow: -5px 5px 0px var(--cp-yellow);
+    @extend .clipped-corner;
+    padding: 2rem;
+}
+
+/* Core Component Styles */
+.tech-button {
+    background: var(--cp-yellow);
+    color: var(--cp-black);
+    border: none;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    padding: 12px 24px;
+    text-transform: uppercase;
+    clip-path: polygon(0 0,
+            100% 0,
+            100% calc(100% - 10px),
+            calc(100% - 10px) 100%,
+            0 100%);
+    transition: all 0.2s;
+    cursor: pointer;
+
+    &:hover {
+        background: #ffffff;
+        box-shadow: 4px 4px 0 var(--cp-blue);
+        transform: translate(-2px, -2px);
+    }
+
+    &.secondary {
+        background: transparent;
+        border: 2px solid var(--cp-yellow);
+        color: var(--cp-yellow);
+
+        &:hover {
+            background: var(--cp-yellow);
+            color: var(--cp-black);
+        }
+    }
+
+    &.danger {
+        background: var(--cp-pink);
+        color: white;
+
+        &:hover {
+            box-shadow: 4px 4px 0 var(--cp-yellow);
+        }
+    }
+}
+
+.tech-input {
+    background: #111;
+    border: 1px solid var(--cp-blue);
+    color: var(--cp-blue);
+    padding: 12px;
+    font-family: 'Share Tech Mono', monospace;
+    @extend .clipped-corner;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+        border-color: #fff;
+    }
+}
+
+.tech-card {
+    @extend .glass-panel;
+    padding: 2rem;
+    position: relative;
+
+    &::after {
+        content: "";
+        position: absolute;
+        top: -1px;
+        left: -1px;
+        right: -1px;
+        bottom: -1px;
+        border-radius: 12px;
+        padding: 1px;
+        background: linear-gradient(45deg, var(--neon-cyan), transparent, var(--neon-magenta));
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+        opacity: 0.5;
+    }
+}
+
+/* Animations */
+@keyframes glitch-anim {
+    0% {
+        clip: rect(10px, 9999px, 20px, 0);
+    }
+
+    20% {
+        clip: rect(30px, 9999px, 40px, 0);
+    }
+
+    40% {
+        clip: rect(50px, 9999px, 60px, 0);
+    }
+
+    60% {
+        clip: rect(20px, 9999px, 30px, 0);
+    }
+
+    80% {
+        clip: rect(40px, 9999px, 10px, 0);
+    }
+
+    100% {
+        clip: rect(60px, 9999px, 50px, 0);
+    }
+}
+
+@keyframes glitch-anim2 {
+    0% {
+        clip: rect(60px, 9999px, 50px, 0);
+    }
+
+    20% {
+        clip: rect(40px, 9999px, 10px, 0);
+    }
+
+    40% {
+        clip: rect(20px, 9999px, 30px, 0);
+    }
+
+    60% {
+        clip: rect(50px, 9999px, 60px, 0);
+    }
+
+    80% {
+        clip: rect(30px, 9999px, 40px, 0);
+    }
+
+    100% {
+        clip: rect(10px, 9999px, 20px, 0);
+    }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--cp-black);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--cp-yellow);
+    border: 2px solid var(--cp-black);
+}

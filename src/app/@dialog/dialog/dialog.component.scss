@@ -1,0 +1,44 @@
+.dialog-container {
+    padding: 2rem;
+    background: var(--cp-dark-blue) !important;
+    color: var(--text-main);
+    min-width: 350px;
+    max-width: 500px;
+}
+
+.dia-title {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: var(--cp-yellow);
+}
+
+.dialog-content {
+    margin: 1rem 0 2rem 0;
+    padding: 0 !important;
+}
+
+.message-wrapper {
+    padding: 1.5rem;
+    background: rgba(255, 0, 85, 0.05);
+    border-left: 4px solid var(--cp-pink);
+}
+
+.tech-message {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1.1rem;
+    margin: 0;
+    line-height: 1.6;
+    color: var(--text-main);
+}
+
+.dialog-actions {
+    justify-content: center;
+    padding: 0 !important;
+}
+
+.btn-box {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}

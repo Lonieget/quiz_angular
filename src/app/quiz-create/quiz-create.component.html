@@ -1,87 +1,91 @@
-<div class="container" [formGroup]="quizForm">
-  <h2>建立新問卷</h2>
+<div class="create-container" [formGroup]="quizForm">
+  <h2 class="tech-font cyber-glitch page-title" [attr.data-text]="'矩陣架構編譯器 (Matrix Architect)'">矩陣架構編譯器 (Matrix
+    Architect)</h2>
 
-  <fieldset formGroupName="quiz">
-    <legend>基本資訊</legend>
-    <div class="form-group">
-      <label>問卷標題：</label>
-      <input type="text" formControlName="title" placeholder="輸入問卷名稱">
-    </div>
-
-    <div class="form-group">
-      <label>描述：</label>
-      <textarea formControlName="description"></textarea>
-    </div>
-
-    <div class="form-row">
-      <div>
-        <label>開始日期：</label>
-        <input type="date" formControlName="startDate">
+  <div class="cyber-panel base-info-card">
+    <fieldset formGroupName="quiz" class="no-border">
+      <legend class="tech-font neon-text-cyan">// 核心組態參數 (PRIMARY_PARAMS)</legend>
+      <div class="form-group">
+        <label>區域識別名稱 // SECTOR_ID</label>
+        <input type="text" formControlName="title" placeholder="ENTER_MATRIX_NAME..." class="tech-input">
       </div>
-      <div>
-        <label>結束日期：</label>
-        <input type="date" formControlName="endDate">
+
+      <div class="form-group">
+        <label>任務簡報 // MISSION_BRIEF</label>
+        <textarea formControlName="description" class="tech-input" placeholder="PROVIDE_CONTEXT..."></textarea>
       </div>
-    </div>
-  </fieldset>
 
-  <hr>
-
-  <div>
-    <h3>題目列表</h3>
-    <div formArrayName="questionVoList">
-      @for (question of questions.controls; track question; let i = $index) {
-        <div [formGroupName]="i" class="question-block">
-          <div class="header-row">
-            <h4>題目 {{ i + 1 }}</h4>
-            <label>
-              <input type="checkbox" formControlName="required"> 必填
-            </label>
-          </div>
-
-          <div class="form-group">
-            <label>題目內容：</label>
-            <input type="text" formControlName="name" placeholder="輸入題目內容">
-          </div>
-
-          <div class="form-group">
-            <label>題型：</label>
-            <select formControlName="type">
-              <option value="S">單選</option>
-              <option value="M">多選</option>
-              <option value="T">文字輸入</option>
-            </select>
-          </div>
-
-          @if (question.get('type')?.value !== 'T') {
-            <div formArrayName="optionsList" class="options-container">
-              @for (option of getOptions(question).controls; track option; let j = $index) {
-                <div [formGroupName]="j" class="option-block">
-                  <label>選項 {{ j + 1 }}：</label>
-                  <input type="text" formControlName="optionName" placeholder="輸入選項內容">
-                  <button type="button" (click)="removeOption(question, j)">刪除</button>
-                </div>
-              } @empty {
-                <p>請點擊下方按鈕新增選項。</p>
-              }
-              <button type="button" (click)="addOption(question)">＋ 新增選項</button>
-            </div>
-          }
-
-          <div class="question-actions">
-            <button type="button" (click)="removeQuestion(i)" class="btn-delete">刪除題目</button>
-          </div>
-          <hr>
+      <div class="form-row">
+        <div class="form-group half">
+          <label>部署日期 // DEPLOY_DATE</label>
+          <input type="date" formControlName="startDate" class="tech-input" [min]="minDate">
         </div>
+        <div class="form-group half">
+          <label>除役日期 // DECOM_DATE</label>
+          <input type="date" formControlName="endDate" class="tech-input"
+            [min]="quizForm.get('quiz.startDate')?.value || minDate">
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="questions-section">
+    <h3 class="tech-font neon-text-cyan section-subtitle">// 單元組件編輯 (UNIT_COMPONENTS)</h3>
+    <div formArrayName="questionVoList" class="questions-array">
+      @for (question of questions.controls; track question; let i = $index) {
+      <div [formGroupName]="i" class="cyber-panel question-entry">
+        <div class="header-row">
+          <h4 class="tech-font">// 單元 UNIT_{{ i + 1 }}</h4>
+          <label class="required-toggle">
+            <input type="checkbox" formControlName="required">
+            <span class="tech-font">關鍵項目 (CRITICAL)</span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label>組件邏輯內容 // LOGIC_STREAMS</label>
+          <input type="text" formControlName="name" placeholder="SPECIFY_LOGIC..." class="tech-input">
+        </div>
+
+        <div class="form-group">
+          <label>訊號格式 // SIG_TYPE</label>
+          <select formControlName="type" class="tech-input">
+            <option value="S">單位元選擇 (Single-Bit)</option>
+            <option value="M">多位元選擇 (Multi-Bit)</option>
+            <option value="T">字串串流 (String Stream)</option>
+          </select>
+        </div>
+
+        @if (question.get('type')?.value !== 'T') {
+        <div formArrayName="optionsList" class="options-manager">
+          @for (option of getOptions(question).controls; track option; let j = $index) {
+          <div [formGroupName]="j" class="option-row">
+            <label class="tech-font">端口 Port {{ j + 1 }}</label>
+            <input type="text" formControlName="optionName" placeholder="DEFINE_PORT..." class="tech-input">
+            <button type="button" (click)="removeOption(question, j)" class="tech-button danger btn-tiny">清除
+              (PURGE)</button>
+          </div>
+          } @empty {
+          <p class="empty-hint">請初始化端口數據流。</p>
+          }
+          <button type="button" (click)="addOption(question)" class="tech-button btn-small">初始化新端口 (INC_PORT)</button>
+        </div>
+        }
+
+        <div class="question-actions">
+          <button type="button" (click)="removeQuestion(i)" class="tech-button danger">封存此單元 (DECONSTRUCT)</button>
+        </div>
+      </div>
       }
 
-      <button type="button" (click)="addQuestion()" class="btn-add-q">新增題目</button>
+      <div class="add-container">
+        <button type="button" (click)="addQuestion()" class="tech-button">建構新單元 (CONSTRUCT_UNIT)</button>
+      </div>
     </div>
-<div>
-  <button (click)="onBack()">返回</button>
-</div>
-    <div class="footer-actions">
-      <button type="button" (click)="onSubmit()" class="btn-submit">送出問卷</button>
-    </div>
+  </div>
+
+  <div class="global-actions cyber-panel">
+    <button (click)="onBack()" class="tech-button secondary">返回 (ESC)</button>
+    <button type="button" (click)="onSubmit()" class="tech-button">提交矩陣 (COMMIT_MATRIX)</button>
   </div>
 </div>

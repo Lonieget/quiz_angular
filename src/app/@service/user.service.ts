@@ -19,5 +19,6 @@ export class UserService {
     this.email = "";
     this.age = 0;
     this.gender = "";
+    this.online = false;
   }
 }

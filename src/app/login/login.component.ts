@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, inject, model, signal} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, model, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiDataService } from '../@service/api-data.service';
 import { FormsModule } from "@angular/forms";
@@ -27,23 +27,23 @@ export class LoginComponent {
   }
 
   login() {
-    if(this.account==undefined || this.passwrod==undefined){
+    if (this.account == undefined || this.passwrod == undefined) {
       this.openDialog("請輸入帳號密碼");
       return;
     }
     this.apiDataService.login(this.account, this.passwrod).subscribe((res: LoginData) => {
       if (res.code == 200) {
-        alert("登入成功")
+        this.openDialog("登入成功")
         console.log(res);
         this.userService.name = res.name;
         this.userService.phone = res.phone;
         this.userService.email = res.email;
         this.userService.age = res.age;
         this.userService.gender = res.gender;
-        this.userService.online =true;
+        this.userService.online = true;
         this.router.navigate(['questionnaire']);
       } else {
-        alert("登入失敗")
+        this.openDialog("登入失敗")
       }
     });
 
@@ -58,22 +58,21 @@ export class LoginComponent {
   registerUser() {
     this.apiDataService.register(this.account, this.passwrod, this.name, this.phone, this.email, this.age, this.gender).subscribe((res) => {
       if (res.code == 200) {
-        alert("註冊成功，請重新登入");
+        this.openDialog("註冊成功，請重新登入");
         console.log(res);
         this.registerBut = false;
       } else {
-        alert("註冊失敗")
+        this.openDialog("註冊失敗")
       }
     });
   }
 
   readonly dialog = inject(MatDialog);
-  
+
   openDialog(message: string) {
-     const dialogRef = this.dialog.open(DialogComponent, {
-      width: '80%',
-      height: 'auto',
-      data: { inputData: message }
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: 'auto',
+      data: { message: message }
     });
   }
 }

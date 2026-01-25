@@ -1,50 +1,67 @@
-<div>
-    <h2>Login</h2>
-    @if(registerBut == false) {
-    <form>
-        <label for="account">帳號:</label>
-        <input type="text" name="account" [(ngModel)]="account">
+<div class="login-container">
+    <div class="cyber-panel login-card">
+        <h2 class="tech-font cyber-glitch" data-text="存取權限控制">存取權限控制</h2>
 
-        <label for="password">密碼:</label>
-        <input type="password" name="password" [(ngModel)]="passwrod">
+        @if(registerBut == false) {
+        <form class="login-form">
+            <div class="form-group">
+                <label for="account">使用者身份識別 // ID_IDENT</label>
+                <input type="text" name="account" [(ngModel)]="account" class="tech-input" placeholder="INPUT_ID...">
+            </div>
 
-        <button type="submit" (click)="login()">登入</button>
-        <span (click)="register()">前往註冊</span>
-    </form>
-    } @else {
-    <form>
-        <label for="account">Account:</label>
-        <input type="text" name="account" [(ngModel)]="account">
+            <div class="form-group">
+                <label for="password">安全驗證協定 // SEC_AUTH</label>
+                <input type="password" name="password" [(ngModel)]="passwrod" class="tech-input"
+                    placeholder="INPUT_KEY...">
+            </div>
 
-        <label for="password">Password:</label>
-        <input type="password" name="password" [(ngModel)]="passwrod">
+            <div class="action-row">
+                <button type="submit" (click)="login()" class="tech-button">授權登入 (AUTH)</button>
+                <span (click)="register()" class="link-text">初始化新身分 // NEW_PROFILE</span>
+            </div>
+        </form>
+        } @else {
+        <form class="register-form">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="account">帳號識別</label>
+                    <input type="text" name="account" [(ngModel)]="account" class="tech-input">
+                </div>
+                <div class="form-group">
+                    <label for="password">安全密鑰</label>
+                    <input type="password" name="password" [(ngModel)]="passwrod" class="tech-input">
+                </div>
+                <div class="form-group">
+                    <label for="name">使用者姓名</label>
+                    <input type="text" name="name" [(ngModel)]="name" class="tech-input">
+                </div>
+                <div class="form-group">
+                    <label for="phone">聯絡通訊</label>
+                    <input type="text" name="phone" [(ngModel)]="phone" class="tech-input">
+                </div>
+                <div class="form-group">
+                    <label for="email">電子郵件位址</label>
+                    <input type="text" name="email" [(ngModel)]="email" class="tech-input">
+                </div>
+                <div class="form-group">
+                    <label for="age">生理年齡</label>
+                    <input type="number" name="age" [(ngModel)]="age" class="tech-input">
+                </div>
+                <div class="form-group">
+                    <label for="gender">性別參數</label>
+                    <select name="gender" [(ngModel)]="gender" class="tech-input">
+                        <option value="" disabled selected>SELECT_PARAM</option>
+                        <option value="M">男性 (MALE)</option>
+                        <option value="F">女性 (FEMALE)</option>
+                    </select>
+                </div>
+            </div>
 
-        <label for="name">Name:</label>
-        <input type="text" name="name" [(ngModel)]="name">
-
-        <label for="phone">phone:</label>
-        <input type="text" name="phone" [(ngModel)]="phone">
-
-        <label for="email">Email:</label>
-        <input type="text" name="email" [(ngModel)]="email">
-
-        <label for="age">age:</label>
-        <input type="number" name="age" [(ngModel)]="age">
-
-        <div class="form-group">
-            <label for="gender">性別：</label>
-            <select name="gender" [(ngModel)]="gender">
-                <option value="" disabled selected>請選擇</option>
-                <option value="M">男</option>
-                <option value="F">女</option>
-            </select>
-        </div>
-
-        <button (click)="register()">返回</button>
-        <button (click)="registerUser()">註冊</button>
-    </form>
-
-
-    }
-
+            <div class="action-row">
+                <button (click)="register()" class="tech-button danger">中止程序 (ABORT)</button>
+                <button (click)="registerUser()" class="tech-button">提交註冊 (COMMIT)</button>
+            </div>
+        </form>
+        }
+    </div>
 </div>

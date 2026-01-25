@@ -1,46 +1,69 @@
-<div>
-    <p>搜尋：<input type="text" (keyup)="filterQuiz()" [(ngModel)]="searchText"></p>
+<div class="list-header">
+    <div class="search-box">
+        <label for="search" class="tech-font neon-text-cyan">// 矩陣資料搜尋 // SEARCH_MATRIX</label>
+        <input id="search" type="text" (keyup)="filterQuiz()" [(ngModel)]="searchText" class="tech-input"
+            placeholder="EXEC_QUERY...">
+    </div>
+    <div class="user-info">
+        <span class="tech-font cyber-glitch" [attr.data-text]="'操作員: ' + name">操作員: <span
+                class="neon-text-cyan">{{name}}</span></span>
+    </div>
+    <div class="actions">
+        <button (click)="createQuestion()" class="tech-button">建構新矩陣 (NEW_MATRIX)</button>
+        <button (click)="onLogout()" class="tech-button secondary" style="margin-left: 1rem;">斷開連接 (DISCONNECT)</button>
+    </div>
 </div>
-<div>
-    <span>使用者 : {{name}}</span>
-    <span></span>
-</div>
-<div>
-    <button (click)="createQuestion()">新增問卷</button>
-</div>
-<div>
-    <table>
+
+<div class="table-container cyber-panel">
+    <table class="tech-table">
         <thead>
             <tr>
-                <th>題號</th>
-                <th>題目</th>
-                <th>描述</th>
-                <th>開始日期</th>
-                <th>結束日期</th>
-                <th>發布狀態</th>
-                <th>操作</th>
+                <th class="tech-font">序號 (ID)</th>
+                <th class="tech-font">專案主題 (SUBJ)</th>
+                <th class="tech-font">詳細描述 (DESC)</th>
+                <th class="tech-font">啟動日期 (START)</th>
+                <th class="tech-font">終止日期 (END)</th>
+                <th class="tech-font">發布狀態 (STAT)</th>
+                <th class="tech-font">系統指令 (OP)</th>
             </tr>
         </thead>
         <tbody>
-            @for (quiz of filteredQuizList; track quiz) {
-                <tr>
-                    <td>{{ quiz.id }}</td>
-                    <td (click)="toQuiz(quiz.id)">{{ quiz.title }}</td>
-                    <td>{{quiz.description}}</td>
-                    <td>{{quiz.startDate}}</td>
-                    <td>{{quiz.endDate}}</td>
-                    <td>{{quiz.publish ? '已發布' : '未發布' }}</td>
-                    <td>
-                        <button (click)="feedback(quiz.id)">統計</button>
-                        <button (click)="editQuestion(quiz.id)">編輯</button>
-                        <button (click)="deleteQuestion(quiz.id)">刪除</button>
-                    </td>
-                </tr>
+            @for (quiz of paginatedQuizList; track quiz) {
+            <tr class="table-row">
+                <td><span class="id-badge">{{ quiz.id }}</span></td>
+                <td (click)="toQuiz(quiz.id)" class="title-cell">{{ quiz.title }}</td>
+                <td>{{quiz.description}}</td>
+                <td>{{quiz.startDate}}</td>
+                <td>{{quiz.endDate}}</td>
+                <td>
+                    <span [class]="quiz.publish ? 'status-active' : 'status-pending'">
+                        {{quiz.publish ? 'LIVE' : 'STAGING' }}
+                    </span>
+                </td>
+                <td class="op-cell">
+                    <button (click)="feedback(quiz.id)" class="tech-button btn-small">數據 (DATA)</button>
+                    <button (click)="editQuestion(quiz.id)" class="tech-button btn-small">編輯 (EDT)</button>
+                    <button (click)="deleteQuestion(quiz.id)" class="tech-button btn-small danger">抹除 (PRG)</button>
+                </td>
+            </tr>
             } @empty {
-                <tr>
-                    <td colspan="3">查無相關題目</td>
-                </tr>
+            <tr>
+                <td colspan="7" class="empty-msg">// NO DATA FLOW DETECTED //</td>
+            </tr>
             }
         </tbody>
     </table>
+
+    <div class="pagination-controls">
+        <button (click)="prevPage()" [disabled]="currentPage === 1" class="tech-button btn-small secondary nav-btn">
+            &lt;&lt; PREV
+        </button>
+        <div class="page-indicator tech-font">
+            [ PAGE <span class="neon-text-cyan">{{currentPage}}</span> / {{totalPages}} ]
+        </div>
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages"
+            class="tech-button btn-small secondary nav-btn">
+            NEXT &gt;&gt;
+        </button>
+    </div>
 </div>

@@ -1,2 +1,93 @@
-<p>{{id}}</p>
-<button (click)="back()">返回</button>
+<div class="feedback-container">
+    <div class="dashboard-header">
+        <div class="header-left">
+            <h2 class="tech-font cyber-glitch" [attr.data-text]="'矩陣數據分析 (MATRIX_ANALYSIS)'">矩陣數據分析 (MATRIX_ANALYSIS)
+            </h2>
+            @if (quizInfo) {
+            <p class="matrix-id">// 標記: SECTOR_{{ quizInfo.id }} // 主題: {{ quizInfo.title }}</p>
+            }
+        </div>
+        <div class="nav-actions">
+            <button (click)="toggleView('TRENDS')" [class.active]="viewMode === 'TRENDS'"
+                class="tech-button btn-small secondary">趨勢概覽 (TRENDS)</button>
+            <button (click)="toggleView('RAW')" [class.active]="viewMode === 'RAW'"
+                class="tech-button btn-small secondary">數據串流 (RAW)</button>
+            <button (click)="back()" class="tech-button btn-small danger">返回 (ESC)</button>
+        </div>
+    </div>
+
+    <!-- Trends Analysis View -->
+    @if (viewMode === 'TRENDS') {
+    <div class="analysis-viewport">
+        @if (statistics && statistics.questionVoList?.length) {
+        <div class="stats-grid">
+            @for (question of statistics.questionVoList; track question) {
+            <div class="cyber-panel stat-card">
+                <div class="card-header">
+                    <h3 class="tech-font neon-text-cyan">// 分析單元: {{ question.name }}</h3>
+                    <span class="type-badge">{{ question.type }}</span>
+                </div>
+
+                <div class="results-list">
+                    @for (option of question.optionsList; track option) {
+                    <div class="result-row">
+                        <div class="row-info">
+                            <span class="opt-name">{{ option.optionName }}</span>
+                            <span class="opt-count">{{ option.count || 0 }} 單位</span>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-bar" [style.width]="getPercent(option.count, question.totalResponses)">
+                            </div>
+                            <span class="percent-label">{{ getPercent(option.count, question.totalResponses) }}</span>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+            }
+        </div>
+        } @else {
+        <div class="cyber-panel empty-analysis">
+            <p class="tech-font cyber-glitch" data-text="// 無可用趨勢數據 // NO_TREND_DATA //">// 無可用趨勢數據 // NO_TREND_DATA //
+            </p>
+        </div>
+        }
+    </div>
+    }
+
+    <!-- Raw Data Stream View -->
+    @if (viewMode === 'RAW') {
+    <div class="analysis-viewport">
+        <div class="cyber-panel stream-container">
+            <table class="tech-table">
+                <thead>
+                    <tr>
+                        <th class="tech-font">響應時間 (TIMESTAMP)</th>
+                        <th class="tech-font">操作員 (OPERATOR)</th>
+                        <th class="tech-font">數據摘要 (SUMMARY)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (feedback of feedbackList; track feedback) {
+                    <tr class="table-row">
+                        <td class="tech-font date-cell">{{ feedback.fillinDate }}</td>
+                        <td class="tech-font user-cell">{{ feedback.userName }}</td>
+                        <td class="tech-font data-cell">
+                            <div class="answer-tags">
+                                @for (ans of feedback.answerList; track ans) {
+                                <span class="tag">Q{{ ans.questionId }}: {{ ans.answer }}</span>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                    } @empty {
+                    <tr>
+                        <td colspan="3" class="empty-msg">// NO DATA FLOW DETECTED //</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    }
+</div>
