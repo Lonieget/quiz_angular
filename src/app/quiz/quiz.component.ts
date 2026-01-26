@@ -14,13 +14,13 @@ import { FormsModule } from '@angular/forms';
 })
 export class QuizComponent {
 
-  id:string | null = null;
+  id: string | null = null;
 
-  name!:string;
-  age!:number;
-  email!:string;
-  phone!:string;
-  gender!:string;
+  name!: string;
+  age!: number;
+  email!: string;
+  phone!: string;
+  gender!: string;
 
 
 
@@ -50,11 +50,109 @@ export class QuizComponent {
     this.email = this.userService.email;
     this.phone = this.userService.phone;
     this.gender = this.userService.gender;
+    console.log(this.name, this.age, this.email, this.phone, this.gender);
+
   }
   onBack() {
     window.history.back();
   }
-  sendOut(){
+  sendOut() {
+    // 驗證所有必填題是否已作答
+    const unansweredQuestions: string[] = [];
 
+    for (let i = 0; i < this.questionVoList.length; i++) {
+      const quiz = this.questionVoList[i];
+
+      if (quiz.required) {
+        if (quiz.type === 'S' && !quiz.selectedOption) {
+          unansweredQuestions.push(`問題 ${i + 1}: ${quiz.name}`);
+        } else if (quiz.type === 'M') {
+          const hasSelection = quiz.optionsList.some(option => option.checkBoolean);
+          if (!hasSelection) {
+            unansweredQuestions.push(`問題 ${i + 1}: ${quiz.name}`);
+          }
+        } else if (quiz.type === 'T' && (!quiz.textAnswer || quiz.textAnswer.trim() === '')) {
+          unansweredQuestions.push(`問題 ${i + 1}: ${quiz.name}`);
+        }
+      }
+    }
+
+    // 如果有未回答的必填題，顯示錯誤訊息
+    if (unansweredQuestions.length > 0) {
+      alert('請回答以下必填問題：\n\n' + unansweredQuestions.join('\n'));
+      console.error('未回答的必填問題:', unansweredQuestions);
+      return;
+    }
+
+    // 建立答案列表
+    const answerList = this.questionVoList.map(quiz => {
+      let answer: any = {
+        questionId: quiz.questionId,
+        optionsList: [],
+        textAnswer: '',
+        radioAnswer: 0
+      };
+
+      // 根據問題類型處理答案
+      if (quiz.type === 'S') {
+        // 單選題：使用 radioAnswer 儲存選中的選項 code
+        if (quiz.selectedOption) {
+          answer.radioAnswer = quiz.selectedOption;
+          // 同時提供 optionsList 供後端驗證選項是否匹配
+          const selectedOption = quiz.optionsList.find(option => option.code === quiz.selectedOption);
+          if (selectedOption) {
+            answer.optionsList = [{
+              code: selectedOption.code,
+              optionName: selectedOption.optionName,
+              checkBoolean: false
+            }];
+          }
+        }
+      } else if (quiz.type === 'M') {
+        // 多選題：optionsList 為所有選項的陣列，並標記 checkBoolean
+        answer.optionsList = quiz.optionsList.map(option => ({
+          code: option.code,
+          optionName: option.optionName,
+          checkBoolean: option.checkBoolean || false
+        }));
+      } else if (quiz.type === 'T') {
+        // 文字輸入題：textAnswer 儲存文字內容
+        answer.textAnswer = quiz.textAnswer || '';
+      }
+
+      return answer;
+    });
+
+    // 組合最終的 JSON 資料（符合後端格式）
+    const responseData = {
+      quizId: Number(this.id),
+      user: {
+        name: this.name,
+        age: this.age,
+        email: this.email,
+        phone: this.phone,
+        gender: this.gender
+      },
+      answerList: answerList
+    };
+
+    // 輸出到 console 查看結果
+    console.log('=== 問卷回應資料 ===');
+    console.log(JSON.stringify(responseData, null, 2));
+
+    // 呼叫 API 服務來提交資料
+    this.apiDataService.fillin(responseData).subscribe({
+      next: (response) => {
+        console.log('提交成功:', response);
+        alert('問卷提交成功！感謝您的填寫。');
+        // 可以導向到其他頁面，例如：
+        this.router.navigate(['questionnaire']);
+      },
+      error: (error) => {
+        console.error('提交失敗:', error);
+        alert(`不得重複提交`);
+        this.router.navigate(['questionnaire']);
+      }
+    });
   }
 }

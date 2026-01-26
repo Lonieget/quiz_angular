@@ -5,17 +5,49 @@
   <div class="questions-list">
     @for(quiz of questionVoList; track quiz; let i = $index) {
     <div class="cyber-panel question-card">
-      <h3 class="tech-font neon-text-cyan">// 分析向量 VECTOR_{{ i + 1 }}</h3>
+      <h3 class="tech-font neon-text-cyan">
+        // 分析向量 VECTOR_{{ i + 1 }}
+        @if(quiz.required) {
+        <span class="required-tag" title="此項為必填">[ REQUIRED ]</span>
+        }
+      </h3>
       <p class="question-text">{{ quiz.name }}</p>
 
       <div class="options-container">
+        <!-- 單選題 (Single Choice - type='S') -->
+        @if(quiz.type === 'S') {
+        @for(option of quiz.optionsList; track option){
+        <label class="option-item">
+          <input type="radio" [name]="'question_' + quiz.questionId" [(ngModel)]="quiz.selectedOption"
+            [value]="option.code" class="hidden-checkbox">
+          <span class="custom-checkbox"></span>
+          <span class="option-label">{{ option.optionName }}</span>
+          <span class="status-indicator" [class.active]="quiz.selectedOption === option.code">({{ quiz.selectedOption
+            === option.code ? 'LINKED' : 'OFFLINE' }})</span>
+        </label>
+        }
+        }
+
+        <!-- 多選題 (Multiple Choice - type='M') -->
+        @if(quiz.type === 'M') {
         @for(option of quiz.optionsList; track option){
         <label class="option-item">
           <input type="checkbox" [(ngModel)]="option.checkBoolean" class="hidden-checkbox">
           <span class="custom-checkbox"></span>
           <span class="option-label">{{ option.optionName }}</span>
-          <!-- <span class="status-indicator" [class.active]="option.checkBoolean">({{ option.checkBoolean ? 'LINKED' : 'OFFLINE' }})</span> -->
+          <span class="status-indicator" [class.active]="option.checkBoolean">({{ option.checkBoolean ? 'LINKED' :
+            'OFFLINE' }})</span>
         </label>
+        }
+        }
+
+        <!-- 文字輸入題 (Text Input - type='T') -->
+        @if(quiz.type === 'T') {
+        <div class="text-input-container">
+          <textarea [(ngModel)]="quiz.textAnswer" class="cyber-textarea" placeholder="// 輸入您的回應 INPUT_RESPONSE //"
+            rows="4">
+            </textarea>
+        </div>
         }
       </div>
     </div>

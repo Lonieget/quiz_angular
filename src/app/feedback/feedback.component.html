@@ -24,24 +24,38 @@
             @for (question of statistics.questionVoList; track question) {
             <div class="cyber-panel stat-card">
                 <div class="card-header">
-                    <h3 class="tech-font neon-text-cyan">// 分析單元: {{ question.name }}</h3>
+                    <h3 class="tech-font neon-text-cyan">
+                        // 分析單元: {{ question.name }}
+                        @if(question.required) {
+                        <span class="required-tag" style="color: #ff3e3e; font-size: 0.8rem; margin-left: 10px;">[
+                            REQUIRED ]</span>
+                        }
+                    </h3>
                     <span class="type-badge">{{ question.type }}</span>
                 </div>
 
                 <div class="results-list">
-                    @for (option of question.optionsList; track option) {
-                    <div class="result-row">
-                        <div class="row-info">
-                            <span class="opt-name">{{ option.optionName }}</span>
-                            <span class="opt-count">{{ option.count || 0 }} 單位</span>
-                        </div>
-                        <div class="progress-container">
-                            <div class="progress-bar" [style.width]="getPercent(option.count, question.totalResponses)">
-                            </div>
-                            <span class="percent-label">{{ getPercent(option.count, question.totalResponses) }}</span>
-                        </div>
+                    <div class="chart-wrapper">
+                        <canvas [id]="'chart-' + question.questionId"></canvas>
                     </div>
-                    }
+
+                    <div class="raw-counts-detail">
+                        @for (option of question.optionsList; track option) {
+                        <div class="result-row">
+                            <div class="row-info">
+                                <span class="opt-name">{{ option.optionName }}</span>
+                                <span class="opt-count">{{ option.count || 0 }} 單位</span>
+                            </div>
+                            <div class="progress-container">
+                                <div class="progress-bar"
+                                    [style.width]="getPercent(option.count, question.totalResponses || (statistics.quiz?.totalResponses || 1))">
+                                </div>
+                                <span class="percent-label">{{ getPercent(option.count, question.totalResponses ||
+                                    (statistics.quiz?.totalResponses || 1)) }}</span>
+                            </div>
+                        </div>
+                        }
+                    </div>
                 </div>
             </div>
             }
@@ -64,6 +78,7 @@
                     <tr>
                         <th class="tech-font">響應時間 (TIMESTAMP)</th>
                         <th class="tech-font">操作員 (OPERATOR)</th>
+                        <th class="tech-font">聯絡方式 (CONTACT)</th>
                         <th class="tech-font">數據摘要 (SUMMARY)</th>
                     </tr>
                 </thead>
@@ -71,18 +86,35 @@
                     @for (feedback of feedbackList; track feedback) {
                     <tr class="table-row">
                         <td class="tech-font date-cell">{{ feedback.fillinDate }}</td>
-                        <td class="tech-font user-cell">{{ feedback.userName }}</td>
+                        <td class="tech-font user-cell">
+                            <div>{{ feedback.user.name }}</div>
+                            <small style="opacity: 0.7;">{{ feedback.user.age }}歲 / {{ feedback.user.gender }}</small>
+                        </td>
+                        <td class="tech-font contact-cell">
+                            <div>📧 {{ feedback.user.email }}</div>
+                            <div>📱 {{ feedback.user.phone }}</div>
+                        </td>
                         <td class="tech-font data-cell">
                             <div class="answer-tags">
-                                @for (ans of feedback.answerList; track ans) {
-                                <span class="tag">Q{{ ans.questionId }}: {{ ans.answer }}</span>
+                                @for (ans of feedback.questionAnswerVoList; track ans) {
+                                <div class="answer-item">
+                                    <strong>Q{{ ans.questionId }}:</strong> {{ ans.name }}
+                                    <br>
+                                    @if (ans.type === 'S') {
+                                    <span class="tag">單選: {{ getSelectedOptionName(ans) }}</span>
+                                    } @else if (ans.type === 'M') {
+                                    <span class="tag">多選: {{ getSelectedOptionsNames(ans) }}</span>
+                                    } @else if (ans.type === 'T') {
+                                    <span class="tag">文字: {{ ans.textAnswer || '未填寫' }}</span>
+                                    }
+                                </div>
                                 }
                             </div>
                         </td>
                     </tr>
                     } @empty {
                     <tr>
-                        <td colspan="3" class="empty-msg">// NO DATA FLOW DETECTED //</td>
+                        <td colspan="4" class="empty-msg">// NO DATA FLOW DETECTED //</td>
                     </tr>
                     }
                 </tbody>

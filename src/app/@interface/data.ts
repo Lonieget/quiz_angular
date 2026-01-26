@@ -8,7 +8,7 @@ export interface Quiz {
   endDate: string;   // YYYY-MM-DD
   publish: boolean;
 }
-export interface QuizResponse<T>{
+export interface QuizResponse<T> {
   code: number;
   message: string;
   quizList: Quiz[];
@@ -26,10 +26,45 @@ export interface QuestionVoList {
   quizId: number;
   required: boolean;
   type: string;
+  selectedOption?: number; // 用於單選題 (type='S')
+  textAnswer?: string;     // 用於文字輸入 (type='T')
 }
 
 export interface OptionsList {
   checkBoolean: boolean;
   code: number;
   optionName: string;
+}
+
+// Feedback related interfaces
+export interface User {
+  name: string;
+  phone: string;
+  email: string;
+  age: number;
+  gender: string;
+}
+
+export interface QuestionAnswerVo {
+  quizId: number;
+  questionId: number;
+  name: string;
+  optionsList: OptionsList[];
+  type: string;
+  required: boolean;
+  textAnswer: string;
+  radioAnswer: number;
+}
+
+export interface FeedbackVo {
+  user: User;
+  quiz: Quiz;
+  questionAnswerVoList: QuestionAnswerVo[];
+  fillinDate: string;
+}
+
+export interface FeedbackResponse {
+  code: number;
+  message: string;
+  feedbackVoList: FeedbackVo[];
 }

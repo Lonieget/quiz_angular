@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Data } from '../@interface/data';
+import { Data, FeedbackResponse } from '../@interface/data';
 import { Quiz, QuizResponse } from '../@interface/data';
 import { Observable } from 'rxjs';
 
@@ -47,19 +47,20 @@ export class ApiDataService {
     return this.http.post(url, payload);
   }
 
-  feedback(quizId: number): Observable<any> {
+  feedback(quizId: number): Observable<FeedbackResponse> {
     const url = `${this.apiUrl}/quiz/feedback?quizId=${quizId}`;
-    return this.http.get(url);
+    return this.http.get<FeedbackResponse>(url);
   }
   statistics(quizId: number): Observable<any> {
-    const url = `${this.apiUrl}/quiz/statistics?quizId=${quizId}`;
+    const url = `${this.apiUrl}/quiz/statistic?quizId=${quizId}`;
     return this.http.get(url);
   }
   questionList(quizId: number): Observable<any> {
     const url = `${this.apiUrl}/quiz/question_list?quizId=${quizId}`;
     return this.http.get(url);
   }
-  fillin(quizId: number) {
-
+  fillin(payload: any): Observable<any> {
+    const url = `${this.apiUrl}/quiz/fillin`;
+    return this.http.post(url, payload);
   }
 }
