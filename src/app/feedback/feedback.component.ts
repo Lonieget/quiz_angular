@@ -1,9 +1,11 @@
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiDataService } from '../@service/api-data.service';
 import { UserService } from '../@service/user.service';
 import { Quiz, FeedbackVo } from '../@interface/data';
 import { CommonModule } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '../@dialog/dialog/dialog.component';
 
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
@@ -21,6 +23,7 @@ export class FeedbackComponent implements OnInit, AfterViewInit, OnDestroy {
   statistics: any = null;
   feedbackList: FeedbackVo[] = [];
   viewMode: 'TRENDS' | 'RAW' = 'TRENDS';
+  readonly dialog = inject(MatDialog);
 
   private charts: Chart[] = [];
 
@@ -34,6 +37,12 @@ export class FeedbackComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     if (!this.userService.online) {
       this.router.navigate(['login']);
+      return;
+    }
+
+    if (this.userService.role !== 'ADMIN') {
+      this.dialog.open(DialogComponent, { data: { message: "存取被拒：只有管理員可以查看分析數據" } });
+      this.router.navigate(['questionnaire']);
       return;
     }
 

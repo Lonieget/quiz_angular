@@ -9,6 +9,7 @@ export class UserService {
   email!: string;
   age!: number;
   gender!: string;
+  role!: string;
 
   online = false;
   constructor() { }
@@ -19,6 +20,7 @@ export class UserService {
     this.email = "";
     this.age = 0;
     this.gender = "";
+    this.role = "";
     this.online = false;
   }
 }

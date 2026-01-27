@@ -136,6 +136,52 @@
     margin-top: 2rem;
 }
 
+.publish-toggle-container {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-top: 1px solid rgba(0, 240, 255, 0.1);
+
+    .publish-toggle {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background: rgba(0, 240, 255, 0.05);
+        }
+
+        input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        span {
+            font-size: 0.85rem;
+            color: var(--cp-blue);
+        }
+
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #888;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+
+            &.active {
+                background: var(--cp-yellow);
+                color: var(--cp-black);
+                box-shadow: 0 0 10px var(--cp-yellow);
+            }
+        }
+    }
+}
+
 .add-container {
     display: flex;
     justify-content: center;

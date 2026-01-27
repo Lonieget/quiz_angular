@@ -47,6 +47,12 @@ export class EditComponent {
       return;
     }
 
+    if (this.userService.role !== 'ADMIN') {
+      this.dialog.open(DialogComponent, { data: { message: "存取被拒：只有管理員可以修正矩陣數據" } });
+      this.router.navigate(['questionnaire']);
+      return;
+    }
+
     this.route.paramMap.subscribe(params => {
       this.id = params.get('id');
       if (this.id) {

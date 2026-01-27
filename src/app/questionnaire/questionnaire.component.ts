@@ -22,7 +22,7 @@ export class QuestionnaireComponent implements OnInit {
   filteredQuizList: Quiz[] = [];
   currentPage: number = 1;
   pageSize: number = 5;
-
+  userRole!: string;
   name!: string
   readonly dialog = inject(MatDialog);
   constructor(private apiDataService: ApiDataService, private userService: UserService, private router: Router) { }
@@ -35,6 +35,7 @@ export class QuestionnaireComponent implements OnInit {
     }
     this.getQuizStatus();
     this.name = this.userService.name;
+    this.userRole = this.userService.role;
   }
   editQuestion(id: number) {
     this.router.navigate(['edit', id]);
@@ -74,7 +75,17 @@ export class QuestionnaireComponent implements OnInit {
   }
   getQuizStatus() {
     this.apiDataService.getQuiz().subscribe((res: any) => {
-      this.quizList = res.quizList;
+      const allQuizzes: Quiz[] = res.quizList;
+
+      // 根據角色過濾：
+      // 管理者 (ADMIN) 可以看到所有狀態、所有日期的問卷
+      // 一般用戶 (USER) 只能看到「已發布 (publish: true)」的問卷
+      if (this.userService.role === 'ADMIN') {
+        this.quizList = allQuizzes;
+      } else {
+        this.quizList = allQuizzes.filter(q => q.publish === true);
+      }
+
       this.filteredQuizList = [...this.quizList];
     });
   }
@@ -113,5 +124,16 @@ export class QuestionnaireComponent implements OnInit {
     if (this.currentPage > 1) {
       this.currentPage--;
     }
+  }
+
+  isDateValid(start: string, end: string): boolean {
+    if (!start || !end) return false;
+    const now = new Date();
+    now.setHours(0, 0, 0, 0); // 僅比較日期
+
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+
+    return now >= startDate && now <= endDate;
   }
 }

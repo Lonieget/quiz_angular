@@ -39,6 +39,12 @@ export class QuizCreateComponent {
       this.router.navigate(['login']);
       return;
     }
+
+    if (this.userService.role !== 'ADMIN') {
+      this.dialog.open(DialogComponent, { data: { message: "存取被拒：只有管理員可以建構新矩陣" } });
+      this.router.navigate(['questionnaire']);
+      return;
+    }
   }
 
   get questions(): FormArray {

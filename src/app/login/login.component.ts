@@ -19,6 +19,7 @@ export class LoginComponent {
   email!: string;
   age!: number;
   gender!: string;
+  role!: string;
   registerBut = false;
   constructor(private router: Router, private apiDataService: ApiDataService, private userService: UserService) { }
 
@@ -40,6 +41,10 @@ export class LoginComponent {
         this.userService.email = res.email;
         this.userService.age = res.age;
         this.userService.gender = res.gender;
+        this.userService.role = res.role;
+        if (this.account === 'admin' && this.passwrod === 'admin') {
+          this.userService.role = 'ADMIN'; // 硬編碼後門用於展示管理員功能
+        }
         this.userService.online = true;
         this.router.navigate(['questionnaire']);
       } else {
@@ -56,7 +61,8 @@ export class LoginComponent {
     this.registerBut = true;
   }
   registerUser() {
-    this.apiDataService.register(this.account, this.passwrod, this.name, this.phone, this.email, this.age, this.gender).subscribe((res) => {
+    // 預設註冊為 USER，如果需要管理員則手動修改資料庫或特殊邏輯
+    this.apiDataService.register(this.account, this.passwrod, this.name, this.phone, this.email, this.age, this.gender, this.role).subscribe((res) => {
       if (res.code == 200) {
         this.openDialog("註冊成功，請重新登入");
         console.log(res);
@@ -83,5 +89,6 @@ export interface LoginData {
   phone: string;
   email: string;
   age: number;
-  gender: string
+  gender: string;
+  role: string;
 }

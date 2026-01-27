@@ -6,10 +6,14 @@
     </div>
     <div class="user-info">
         <span class="tech-font cyber-glitch" [attr.data-text]="'操作員: ' + name">操作員: <span
-                class="neon-text-cyan">{{name}}</span></span>
+                class="neon-text-cyan">{{name}}</span>
+            <span class="role-badge" [class.admin]="userRole === 'ADMIN'">// {{ userRole }}</span>
+        </span>
     </div>
     <div class="actions">
+        @if (userRole === 'ADMIN') {
         <button (click)="createQuestion()" class="tech-button">建構新矩陣 (NEW_MATRIX)</button>
+        }
         <button (click)="onLogout()" class="tech-button secondary" style="margin-left: 1rem;">斷開連接 (DISCONNECT)</button>
     </div>
 </div>
@@ -41,9 +45,15 @@
                     </span>
                 </td>
                 <td class="op-cell">
+                    @if (userRole === 'ADMIN') {
                     <button (click)="feedback(quiz.id)" class="tech-button btn-small">數據 (DATA)</button>
                     <button (click)="editQuestion(quiz.id)" class="tech-button btn-small">編輯 (EDT)</button>
                     <button (click)="deleteQuestion(quiz.id)" class="tech-button btn-small danger">抹除 (PRG)</button>
+                    } @else {
+                    <button (click)="toQuiz(quiz.id)" [disabled]="!isDateValid(quiz.startDate, quiz.endDate)"
+                        [attr.title]="!isDateValid(quiz.startDate, quiz.endDate) ? '目前非開放填寫區間' : ''"
+                        class="tech-button btn-small">填寫 (EXEC)</button>
+                    }
                 </td>
             </tr>
             } @empty {

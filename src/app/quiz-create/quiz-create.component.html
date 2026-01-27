@@ -26,6 +26,16 @@
             [min]="quizForm.get('quiz.startDate')?.value || minDate">
         </div>
       </div>
+
+      <div class="form-group publish-toggle-container">
+        <label class="publish-toggle tech-font">
+          <input type="checkbox" formControlName="publish">
+          <span class="tech-font">發布矩陣 // PUBLISH_MATRIX</span>
+          <span class="status-badge" [class.active]="quizForm.get('quiz.publish')?.value">
+            ({{ quizForm.get('quiz.publish')?.value ? 'ACTIVE' : 'OFFLINE' }})
+          </span>
+        </label>
+      </div>
     </fieldset>
   </div>
 
@@ -35,7 +45,12 @@
       @for (question of questions.controls; track question; let i = $index) {
       <div [formGroupName]="i" class="cyber-panel question-entry">
         <div class="header-row">
-          <h4 class="tech-font">// 單元 UNIT_{{ i + 1 }}</h4>
+          <h4 class="tech-font">
+            // 單元 UNIT_{{ i + 1 }}
+            @if(question.get('required')?.value) {
+            <span class="required-tag" style="color: #ff3e3e; font-size: 0.7rem; margin-left: 10px;">[ REQUIRED ]</span>
+            }
+          </h4>
           <label class="required-toggle">
             <input type="checkbox" formControlName="required">
             <span class="tech-font">關鍵項目 (CRITICAL)</span>

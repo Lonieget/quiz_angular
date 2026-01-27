@@ -41,9 +41,9 @@ export class ApiDataService {
     return this.http.post(url, payload);
   }
 
-  register(account: string, password: string, name: string, phone: string, email: string, age: number, gender: string): Observable<any> {
+  register(account: string, password: string, name: string, phone: string, email: string, age: number, gender: string, role: string): Observable<any> {
     const url = `${this.apiUrl}/quiz/add_info`;
-    const payload = { account, password, name, phone, email, age, gender };
+    const payload = { account, password, name, phone, email, age, gender, role };
     return this.http.post(url, payload);
   }
 
