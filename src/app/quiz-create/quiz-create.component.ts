@@ -53,7 +53,7 @@ export class QuizCreateComponent {
 
   addQuestion() {
     const questionGroup = this.fb.group({
-      // 對應 JSON 的 "name"
+      // 對應 JSON 的 "name
       name: ['', Validators.required],
       // 對應 JSON 的 "type"
       type: ['S'],

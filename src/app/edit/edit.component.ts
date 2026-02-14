@@ -65,6 +65,11 @@ export class EditComponent {
     this.apiDataService.getQuiz().subscribe(res => {
       const target = res.quizList.find(q => q.id === id);
       if (target) {
+        if (target.publish) {
+          this.dialog.open(DialogComponent, { data: { message: "已發布的問卷無法編輯" } });
+          this.router.navigate(['questionnaire']);
+          return;
+        }
         this.editForm.get('quiz')?.patchValue(target);
       }
     });

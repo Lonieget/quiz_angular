@@ -37,8 +37,13 @@ export class QuestionnaireComponent implements OnInit {
     this.name = this.userService.name;
     this.userRole = this.userService.role;
   }
-  editQuestion(id: number) {
-    this.router.navigate(['edit', id]);
+  editQuestion(quiz: Quiz) {
+    if (quiz.publish) {
+      console.warn('Attempted to edit a published questionnaire:', quiz.id);
+      this.dialog.open(DialogComponent, { data: { message: "已發布的問卷無法編輯", isWarning: true } });
+      return;
+    }
+    this.router.navigate(['edit', quiz.id]);
   }
   deleteQuestion(id: number) {
     const dialogRef = this.dialog.open(DialogComponent, {
@@ -96,9 +101,17 @@ export class QuestionnaireComponent implements OnInit {
     this.router.navigate(['questCreate']);
   }
 
-  toQuiz(id: number) {
-    this.router.navigate(['quiz', id]);
-    console.log(id);
+  toQuiz(quiz: Quiz) {
+    if (!this.isDateValid(quiz.startDate, quiz.endDate)) {
+      this.dialog.open(DialogComponent, {
+        data: {
+          message: `目前非開放填寫區間\n開放時間: ${quiz.startDate} ~ ${quiz.endDate}`,
+          isWarning: true
+        }
+      });
+      return;
+    }
+    this.router.navigate(['quiz', quiz.id]);
   }
   onLogout() {
     this.userService.resetUserInfo();
@@ -129,11 +142,9 @@ export class QuestionnaireComponent implements OnInit {
   isDateValid(start: string, end: string): boolean {
     if (!start || !end) return false;
     const now = new Date();
-    now.setHours(0, 0, 0, 0); // 僅比較日期
+    // 轉為本地 YYYY-MM-DD 格式進行字串比較，避免時區偏移問題
+    const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 
-    const startDate = new Date(start);
-    const endDate = new Date(end);
-
-    return now >= startDate && now <= endDate;
+    return today >= start && today <= end;
   }
 }

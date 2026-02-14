@@ -124,10 +124,10 @@ export class QuizComponent {
 
       // 根據問題類型處理答案
       if (quiz.type === 'S') {
-        // 單選題：使用 radioAnswer 儲存選中的選項 code
+        // 單選題
         if (quiz.selectedOption) {
           answer.radioAnswer = quiz.selectedOption;
-          // 同時提供 optionsList 供後端驗證選項是否匹配
+
           const selectedOption = quiz.optionsList.find(option => option.code === quiz.selectedOption);
           if (selectedOption) {
             answer.optionsList = [{
@@ -138,14 +138,14 @@ export class QuizComponent {
           }
         }
       } else if (quiz.type === 'M') {
-        // 多選題：optionsList 為所有選項的陣列，並標記 checkBoolean
+        // 多選題
         answer.optionsList = quiz.optionsList.map(option => ({
           code: option.code,
           optionName: option.optionName,
           checkBoolean: option.checkBoolean || false
         }));
       } else if (quiz.type === 'T') {
-        // 文字輸入題：textAnswer 儲存文字內容
+        // 文字輸入題
         answer.textAnswer = quiz.textAnswer || '';
       }
 

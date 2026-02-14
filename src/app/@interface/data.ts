@@ -68,3 +68,37 @@ export interface FeedbackResponse {
   message: string;
   feedbackVoList: FeedbackVo[];
 }
+export interface StatisticsResponse {
+  code: number;
+  message: string;
+  statisticVo: StatisticVo; // 注意：這是單一物件
+}
+
+export interface StatisticVo {
+  questionsCountVoList: QuestionCountEntry[];
+  quiz: Quiz;
+}
+
+export interface QuestionCountEntry {
+  questionId: number;
+  name: string;
+  type: string;
+  required: boolean;
+  optionsCountList: OptionCount[];
+}
+
+export interface OptionCount {
+  optionName: string;
+  count: number;
+}
+
+export interface userData {
+  message: string;
+  code: number;
+  name: string;
+  phone: string;
+  email: string;
+  age: number;
+  gender: string;
+  role: string;
+}

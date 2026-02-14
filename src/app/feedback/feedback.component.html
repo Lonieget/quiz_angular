@@ -6,6 +6,11 @@
             @if (quizInfo) {
             <p class="matrix-id">// 標記: SECTOR_{{ quizInfo.id }} // 主題: {{ quizInfo.title }}</p>
             }
+            @if (statistics?.message === 'MOCK_DATA_FEED_ACTIVE') {
+            <span class="mock-badge"
+                style="color: #ffe600; font-size: 0.7rem; border: 1px solid #ffe600; padding: 2px 5px; margin-top: 5px; display: inline-block;">[
+                MOCK_DATA_MODE_ACTIVE ]</span>
+            }
         </div>
         <div class="nav-actions">
             <button (click)="toggleView('TRENDS')" [class.active]="viewMode === 'TRENDS'"
@@ -19,43 +24,50 @@
     <!-- Trends Analysis View -->
     @if (viewMode === 'TRENDS') {
     <div class="analysis-viewport">
-        @if (statistics && statistics.questionVoList?.length) {
+        @if (statistics && statistics.statisticVo.questionsCountVoList?.length) {
         <div class="stats-grid">
-            @for (question of statistics.questionVoList; track question) {
+            @for (qEntry of statistics.statisticVo.questionsCountVoList; track qEntry) {
             <div class="cyber-panel stat-card">
                 <div class="card-header">
                     <h3 class="tech-font neon-text-cyan">
-                        // 分析單元: {{ question.name }}
-                        @if(question.required) {
+                        // 分析單元: {{ qEntry.name }}
+                        @if(qEntry.required) {
                         <span class="required-tag" style="color: #ff3e3e; font-size: 0.8rem; margin-left: 10px;">[
                             REQUIRED ]</span>
                         }
                     </h3>
-                    <span class="type-badge">{{ question.type }}</span>
                 </div>
 
-                <div class="results-list">
+                <div class="results-list" [class.text-only]="qEntry.type === 'T'">
+                    @if (qEntry.type === 'T') {
+                    <div class="text-responses-container">
+                        <div class="terminal-header tech-font">// 最近回饋數據串流 (RECENT_FEEDBACK_STREAM)</div>
+                        <div class="text-responses-list cyber-scrollbar">
+                            @for (resp of getTextResponses(qEntry.questionId); track resp) {
+                            <div class="text-response-item">
+                                <span class="bullet">> </span> {{ resp }}
+                            </div>
+                            } @empty {
+                            <div class="empty-text">// NO_DATA_DETECTED //</div>
+                            }
+                        </div>
+                    </div>
+                    } @else {
                     <div class="chart-wrapper">
-                        <canvas [id]="'chart-' + question.questionId"></canvas>
+                        <canvas [id]="'chart-' + qEntry.questionId"></canvas>
                     </div>
 
                     <div class="raw-counts-detail">
-                        @for (option of question.optionsList; track option) {
+                        @for (opt of qEntry.optionsCountList; track opt) {
                         <div class="result-row">
                             <div class="row-info">
-                                <span class="opt-name">{{ option.optionName }}</span>
-                                <span class="opt-count">{{ option.count || 0 }} 單位</span>
-                            </div>
-                            <div class="progress-container">
-                                <div class="progress-bar"
-                                    [style.width]="getPercent(option.count, question.totalResponses || (statistics.quiz?.totalResponses || 1))">
-                                </div>
-                                <span class="percent-label">{{ getPercent(option.count, question.totalResponses ||
-                                    (statistics.quiz?.totalResponses || 1)) }}</span>
+                                <span class="opt-name">{{ opt.optionName }}</span>
+                                <span class="opt-count">{{ opt.count || 0 }} 單位</span>
                             </div>
                         </div>
                         }
                     </div>
+                    }
                 </div>
             </div>
             }

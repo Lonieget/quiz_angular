@@ -35,7 +35,7 @@
             @for (quiz of paginatedQuizList; track quiz) {
             <tr class="table-row">
                 <td><span class="id-badge">{{ quiz.id }}</span></td>
-                <td (click)="toQuiz(quiz.id)" class="title-cell">{{ quiz.title }}</td>
+                <td (click)="toQuiz(quiz)" class="title-cell">{{ quiz.title }}</td>
                 <td>{{quiz.description}}</td>
                 <td>{{quiz.startDate}}</td>
                 <td>{{quiz.endDate}}</td>
@@ -47,12 +47,10 @@
                 <td class="op-cell">
                     @if (userRole === 'ADMIN') {
                     <button (click)="feedback(quiz.id)" class="tech-button btn-small">數據 (DATA)</button>
-                    <button (click)="editQuestion(quiz.id)" class="tech-button btn-small">編輯 (EDT)</button>
+                    <button (click)="editQuestion(quiz)" class="tech-button btn-small">編輯 (EDT)</button>
                     <button (click)="deleteQuestion(quiz.id)" class="tech-button btn-small danger">抹除 (PRG)</button>
                     } @else {
-                    <button (click)="toQuiz(quiz.id)" [disabled]="!isDateValid(quiz.startDate, quiz.endDate)"
-                        [attr.title]="!isDateValid(quiz.startDate, quiz.endDate) ? '目前非開放填寫區間' : ''"
-                        class="tech-button btn-small">填寫 (EXEC)</button>
+                    <button (click)="toQuiz(quiz)" class="tech-button btn-small">填寫 (EXEC)</button>
                     }
                 </td>
             </tr>
